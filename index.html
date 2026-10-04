@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>README Builder</title>
+<style>
+  :root{--paper:#f6f8fa;--panel:#fff;--ink:#17202b;--muted:#55616e;--dim:#8a94a0;--line:#e3e8ee;
+    --accent:#5b3fb0;--accent-soft:#5b3fb012;--good:#17854a;--shadow:0 1px 2px rgba(20,25,30,.04),0 6px 20px rgba(20,25,30,.06);}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;background:var(--paper);color:var(--ink);line-height:1.45;font-size:14px}
+  .wrap{max-width:1200px;margin:0 auto;padding:28px 22px 60px}
+  header.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px;border-bottom:2px solid var(--accent);padding-bottom:15px}
+  .brand h1{font-size:22px;font-weight:700}.brand .sub{color:var(--muted);font-size:13px;margin-top:4px;max-width:62ch}
+  .by{text-align:right;font-size:12px;color:var(--muted)}.by a{color:var(--accent);text-decoration:none}
+  .note{background:var(--accent-soft);border:1px solid var(--line);border-left:3px solid var(--accent);padding:10px 14px;border-radius:6px;font-size:12.5px;color:var(--muted);margin:18px 0 18px}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+  @media(max-width:860px){.cols{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+  .card h2{font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);padding:13px 16px 10px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+  .card h2 .tabs button{font:inherit;font-size:11.5px;font-weight:600;border:1px solid var(--line);background:var(--paper);color:var(--muted);border-radius:6px;padding:4px 10px;cursor:pointer;margin-left:5px}
+  .card h2 .tabs button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .form{padding:15px 16px}
+  .fld{margin-bottom:13px}
+  .fld label{display:block;font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+  .fld input,.fld textarea,.fld select{width:100%;font:inherit;font-size:14px;padding:8px 11px;border:1px solid var(--line);border-radius:7px;background:var(--paper);color:var(--ink)}
+  .fld textarea{min-height:70px;resize:vertical;font-family:inherit}
+  .fld input:focus,.fld textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+  .checks{display:flex;flex-wrap:wrap;gap:7px}
+  .chk{display:inline-flex;gap:5px;align-items:center;font-size:12.5px;background:var(--paper);border:1px solid var(--line);padding:5px 10px;border-radius:20px;cursor:pointer}
+  .chk input{accent-color:var(--accent)}
+  .hint{font-size:11px;color:var(--dim);margin-top:3px}
+  .out{padding:0}
+  textarea#md{width:100%;min-height:460px;border:none;padding:14px 16px;font-family:"Consolas","Courier New",monospace;font-size:12.5px;resize:vertical;color:var(--ink);background:var(--panel);line-height:1.5}
+  textarea#md:focus{outline:none}
+  .preview{padding:16px 18px;min-height:460px;overflow:auto}
+  .preview h1{font-size:22px;border-bottom:1px solid var(--line);padding-bottom:7px;margin-bottom:12px}
+  .preview h2{font-size:17px;margin:16px 0 8px;color:var(--ink);border:none;padding:0;text-transform:none;letter-spacing:0}
+  .preview h3{font-size:14px;margin:12px 0 6px}
+  .preview p{margin-bottom:9px}.preview ul{margin:0 0 10px 20px}.preview li{margin-bottom:3px}
+  .preview code{background:#eef1f4;padding:1px 5px;border-radius:4px;font-family:"Consolas",monospace;font-size:12.5px}
+  .preview pre{background:#1b2430;color:#e7edf5;padding:12px;border-radius:8px;overflow:auto;margin-bottom:10px}
+  .preview pre code{background:none;color:inherit;padding:0}
+  .preview img{vertical-align:middle;margin:1px}
+  .preview table{border-collapse:collapse;margin-bottom:10px}.preview th,.preview td{border:1px solid var(--line);padding:5px 10px;font-size:13px}
+  .preview a{color:var(--accent)}
+  .preview center{display:block;text-align:center}
+  .copybar{padding:11px 16px;border-top:1px solid var(--line);display:flex;gap:9px}
+  .copybar button{font:inherit;font-size:12.5px;font-weight:600;color:var(--accent);background:none;border:1px solid var(--line);border-radius:7px;padding:7px 13px;cursor:pointer}
+  .copybar button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  footer{margin-top:30px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--dim);text-align:center}
+  footer a{color:var(--accent);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><h1>README Builder</h1>
+      <div class="sub">Fill in a short form and get a clean, badge-ready README.md — with a live preview. Copy the markdown or download the file.</div></div>
+    <div class="by">Built by <b>Jithin J</b><br><a href="https://github.com/jithinjolly2000-maker" target="_blank" rel="noopener">github.com/jithinjolly2000-maker</a></div>
+  </header>
+  <div class="note">🔒 Runs in your browser — nothing is uploaded. Edit the form or the markdown directly; the preview and output stay in sync.</div>
+
+  <div class="cols">
+    <div class="card">
+      <h2>Project details</h2>
+      <div class="form">
+        <div class="fld"><label>Project name</label><input id="name" value="My Awesome Tool"></div>
+        <div class="fld"><label>Tagline / one-liner</label><input id="tagline" value="Does something genuinely useful, fast."></div>
+        <div class="row2">
+          <div class="fld"><label>GitHub username</label><input id="user" value="jithinjolly2000-maker"></div>
+          <div class="fld"><label>Repo name</label><input id="repo" value="my-awesome-tool"></div>
+        </div>
+        <div class="fld"><label>Live demo URL (optional)</label><input id="demo" placeholder="https://…"></div>
+        <div class="fld"><label>Description</label><textarea id="desc">A short paragraph describing what the project does and who it's for.</textarea></div>
+        <div class="fld"><label>Features (one per line)</label><textarea id="features">Fast and dependency-free
+Runs entirely in the browser
+Clean, documented code</textarea></div>
+        <div class="fld"><label>Tech stack (comma-separated)</label><input id="tech" value="HTML, CSS, JavaScript"></div>
+        <div class="fld"><label>Install / run</label><input id="run" value="Open index.html in a browser"></div>
+        <div class="fld"><label>License</label>
+          <select id="license"><option>MIT</option><option>Apache-2.0</option><option>GPL-3.0</option><option>Unlicense</option><option value="">None</option></select>
+        </div>
+        <div class="fld"><label>Badges &amp; sections</label>
+          <div class="checks" id="opts">
+            <label class="chk"><input type="checkbox" id="optBadges" checked>Shield badges</label>
+            <label class="chk"><input type="checkbox" id="optCenter" checked>Centered header</label>
+            <label class="chk"><input type="checkbox" id="optToc">Table of contents</label>
+            <label class="chk"><input type="checkbox" id="optContrib">Contributing</label>
+            <label class="chk"><input type="checkbox" id="optFooter" checked>Author footer</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Output <span class="tabs"><button data-v="md" class="active">Markdown</button><button data-v="prev">Preview</button></span></h2>
+      <div class="out">
+        <textarea id="md" spellcheck="false"></textarea>
+        <div class="preview" id="preview" style="display:none"></div>
+      </div>
+      <div class="copybar">
+        <button class="primary" id="copyBtn">⧉ Copy markdown</button>
+        <button id="dlBtn">⤓ Download README.md</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>Static tool · vanilla HTML/CSS/JS · in-browser · GitHub Pages · <a href="https://github.com/jithinjolly2000-maker/readme-builder" target="_blank" rel="noopener">source</a></footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var ids=["name","tagline","user","repo","demo","desc","features","tech","run","license"];
+  var optIds=["optBadges","optCenter","optToc","optContrib","optFooter"];
+  var md=document.getElementById("md"), preview=document.getElementById("preview"), manualEdit=false;
+
+  function val(id){return document.getElementById(id).value;}
+  function opt(id){return document.getElementById(id).checked;}
+
+  function build(){
+    var name=val("name"),tag=val("tagline"),user=val("user"),repo=val("repo"),demo=val("demo");
+    var desc=val("desc"),tech=val("tech"),run=val("run"),lic=val("license");
+    var features=val("features").split("\n").map(function(s){return s.trim();}).filter(Boolean);
+    var repoUrl="https://github.com/"+user+"/"+repo;
+    var out="";
+
+    if(opt("optCenter")) out+="<div align=\"center\">\n\n";
+    out+="# "+name+"\n\n";
+    if(tag) out+="### "+tag+"\n\n";
+    if(opt("optBadges")){
+      if(demo) out+="[![Live Demo](https://img.shields.io/badge/%E2%96%B6_Live_Demo-5b3fb0?style=for-the-badge)]("+demo+")\n\n";
+      out+="![Stars](https://img.shields.io/github/stars/"+user+"/"+repo+"?style=flat-square) ";
+      out+="![Last commit](https://img.shields.io/github/last-commit/"+user+"/"+repo+"?style=flat-square) ";
+      if(lic) out+="![License](https://img.shields.io/badge/license-"+encodeURIComponent(lic)+"-0a7a52?style=flat-square)";
+      out+="\n\n";
+    }
+    if(opt("optCenter")) out+="</div>\n\n";
+    out+="---\n\n";
+
+    if(opt("optToc")){
+      out+="## Contents\n\n";
+      out+="- [Description](#description)\n- [Features](#features)\n- [Tech](#tech)\n- [Getting started](#getting-started)\n";
+      if(opt("optContrib")) out+="- [Contributing](#contributing)\n";
+      if(lic) out+="- [License](#license)\n";
+      out+="\n";
+    }
+
+    if(desc) out+="## Description\n\n"+desc+"\n\n";
+    if(demo) out+="**Live demo:** "+demo+"\n\n";
+    if(features.length){ out+="## Features\n\n"+features.map(function(f){return "- "+f;}).join("\n")+"\n\n"; }
+    if(tech){ out+="## Tech\n\n"+tech.split(",").map(function(t){return "`"+t.trim()+"`";}).join(" · ")+"\n\n"; }
+    if(run){ out+="## Getting started\n\n```bash\n"+run+"\n```\n\n"; }
+    if(opt("optContrib")){ out+="## Contributing\n\nPull requests are welcome. For major changes, open an issue first to discuss what you'd like to change.\n\n"; }
+    if(lic){ out+="## License\n\n["+lic+"]("+repoUrl+"/blob/main/LICENSE)\n\n"; }
+    if(opt("optFooter")){ out+="---\n\n<div align=\"center\">\n\nBuilt by **"+user+"** · ["+repoUrl.replace("https://","")+"]("+repoUrl+")\n\n</div>\n"; }
+
+    md.value=out;
+    renderPreview();
+  }
+
+  // minimal markdown -> HTML preview
+  function mdToHtml(src){
+    function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+    var lines=src.split("\n"), html="", i=0, inUl=false, inCode=false, code="";
+    function closeUl(){ if(inUl){html+="</ul>\n";inUl=false;} }
+    while(i<lines.length){
+      var l=lines[i];
+      if(/^```/.test(l)){
+        if(!inCode){inCode=true;code="";} else {inCode=false;html+="<pre><code>"+esc(code)+"</code></pre>\n";}
+        i++;continue;
+      }
+      if(inCode){ code+=(code?"\n":"")+l; i++; continue; }
+      if(/^<div align="center">/.test(l)){ html+='<center>'; i++; continue; }
+      if(/^<\/div>/.test(l)){ html+='</center>'; i++; continue; }
+      if(/^---\s*$/.test(l)){ closeUl(); html+="<hr>"; i++; continue; }
+      if(/^###\s+/.test(l)){ closeUl(); html+="<h3>"+inline(l.replace(/^###\s+/,""))+"</h3>"; i++; continue; }
+      if(/^##\s+/.test(l)){ closeUl(); html+="<h2>"+inline(l.replace(/^##\s+/,""))+"</h2>"; i++; continue; }
+      if(/^#\s+/.test(l)){ closeUl(); html+="<h1>"+inline(l.replace(/^#\s+/,""))+"</h1>"; i++; continue; }
+      if(/^-\s+/.test(l)){ if(!inUl){html+="<ul>";inUl=true;} html+="<li>"+inline(l.replace(/^-\s+/,""))+"</li>"; i++; continue; }
+      if(l.trim()===""){ closeUl(); i++; continue; }
+      closeUl(); html+="<p>"+inline(l)+"</p>"; i++;
+    }
+    closeUl();
+    function inline(s){
+      s=esc(s);
+      s=s.replace(/!\[([^\]]*)\]\(([^)]+)\)/g,'<img alt="$1" src="$2">');
+      s=s.replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2">$1</a>');
+      s=s.replace(/`([^`]+)`/g,'<code>$1</code>');
+      s=s.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+      return s;
+    }
+    return html;
+  }
+  function renderPreview(){ preview.innerHTML=mdToHtml(md.value); }
+
+  ids.concat([]).forEach(function(id){ document.getElementById(id).addEventListener("input",function(){manualEdit=false;build();}); });
+  optIds.forEach(function(id){ document.getElementById(id).addEventListener("change",build); });
+  md.addEventListener("input",function(){ manualEdit=true; renderPreview(); });
+
+  // tabs
+  document.querySelector(".tabs").addEventListener("click",function(e){
+    var b=e.target.closest("button"); if(!b)return;
+    Array.prototype.forEach.call(this.children,function(x){x.classList.remove("active");}); b.classList.add("active");
+    var v=b.getAttribute("data-v");
+    md.style.display = v==="md"?"block":"none";
+    preview.style.display = v==="prev"?"block":"none";
+    if(v==="prev") renderPreview();
+  });
+
+  document.getElementById("copyBtn").addEventListener("click",function(){ navigator.clipboard.writeText(md.value); this.textContent="✓ Copied"; var b=this;setTimeout(function(){b.textContent="⧉ Copy markdown";},1300); });
+  document.getElementById("dlBtn").addEventListener("click",function(){ var blob=new Blob([md.value],{type:"text/markdown"}); var a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="README.md"; a.click(); });
+
+  build();
+})();
+</script>
+</body>
+</html>
